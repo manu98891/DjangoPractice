@@ -1,5 +1,8 @@
 # from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from .models import Project, Task
+from django.shortcuts import get_object_or_404
+
 
 # Create your views here.
 def index(request):
@@ -12,7 +15,10 @@ def about(request):
     return HttpResponse('Segundo mensaje')
 
 def projects(request):
-    return HttpResponse('projects')
+    projects = list(Project.objects.values())
+    return JsonResponse(projects, safe=False)
 
-def task(request):
-    return HttpResponse('task')
+def task(request, id):
+    #task = Task.objects.get(id=id)
+    task = get_object_or_404(Task,id=id)
+    return HttpResponse('task: %s' % task.title)
